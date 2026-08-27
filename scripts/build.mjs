@@ -11,7 +11,10 @@ await cp('index.html', 'dist/index.html');
 const html = await readFile('index.html', 'utf8');
 for (const route of ['kids', 'eventos']) {
   await mkdir(`dist/${route}`, { recursive: true });
-  await writeFile(`dist/${route}/index.html`, html);
+  // Route fallbacks live one directory deeper. The base keeps the same
+  // document-relative URLs working locally and below a Pages project path.
+  const routeHtml = html.replace('<head>', '<head>\n  <base href="../">');
+  await writeFile(`dist/${route}/index.html`, routeHtml);
 }
 
 console.log('XDAW static site built in dist/');
