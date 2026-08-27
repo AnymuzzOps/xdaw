@@ -23,3 +23,29 @@ const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => entry.isIntersecting && entry.target.classList.add('visible'));
 }, { threshold: .14, rootMargin: '0px 0px -5% 0px' });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+const worldTabs = [...document.querySelectorAll('.world-tab')];
+const worldStage = document.querySelector('.world-stage');
+
+const selectWorld = tab => {
+  worldTabs.forEach(item => {
+    const selected = item === tab;
+    item.classList.toggle('active', selected);
+    item.setAttribute('aria-selected', String(selected));
+    item.tabIndex = selected ? 0 : -1;
+    document.querySelector(`#panel-${item.dataset.world}`).hidden = !selected;
+  });
+  worldStage.className = `world-stage world-${tab.dataset.world} reveal visible`;
+};
+
+worldTabs.forEach((tab, index) => {
+  tab.addEventListener('click', () => selectWorld(tab));
+  tab.addEventListener('keydown', event => {
+    if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+    event.preventDefault();
+    const direction = event.key === 'ArrowRight' ? 1 : -1;
+    const next = worldTabs[(index + direction + worldTabs.length) % worldTabs.length];
+    selectWorld(next);
+    next.focus();
+  });
+});
