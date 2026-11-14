@@ -153,3 +153,75 @@
 @media (prefers-reduced-motion: reduce) {
   .journey .step-node { transition: none; }
 }
+
+/* Vive XDAW: stable grid areas, with photography outside the content flow. */
+.live .live-grid {
+  grid-template-columns: minmax(0, 2.15fr) minmax(0, 1fr);
+  grid-template-rows: repeat(2, minmax(210px, auto)) auto;
+  grid-template-areas: "ritual kids" "ritual community" "events events";
+}
+.live .live-class { grid-area: ritual; }
+.live .live-kids { grid-area: kids; }
+.live .live-community { grid-area: community; }
+.live .live-events { grid-area: events; }
+.live .live-grid > article { min-width: 0; }
+.live .live-grid .has-photo {
+  display: grid;
+  align-items: end;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--black);
+}
+.live .live-grid .experience-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  object-fit: cover;
+  object-position: center;
+}
+.live .live-grid .has-photo::before { display: none; }
+.live .live-grid .has-photo::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(0deg, #090909fa 0%, #090909d9 40%, #09090933 74%, transparent 100%);
+  pointer-events: none;
+}
+.live .live-grid .experience-copy {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  align-self: end;
+  overflow-wrap: break-word;
+}
+.live .experience-copy h3, .live .experience-copy p { max-width: 100%; }
+.live .experience-copy a { max-width: 100%; }
+.live .experience-copy .button { white-space: normal; min-height: 44px; }
+.live .experience-copy .text-link { display: inline-flex; align-items: center; gap: 5px; min-height: 44px; }
+.live .live-events > * { min-width: 0; }
+@media (max-width: 1050px) and (min-width: 901px) {
+  .live .live-grid { grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr); }
+}
+@media (max-width: 900px) {
+  .live .live-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: minmax(360px, auto) minmax(250px, auto) auto;
+    grid-template-areas: "ritual ritual" "kids community" "events events";
+  }
+}
+@media (max-width: 560px) {
+  .live .live-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(390px, auto) repeat(2, minmax(250px, auto)) auto;
+    grid-template-areas: "ritual" "kids" "community" "events";
+  }
+}
