@@ -1,10 +1,27 @@
-import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { access, cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 
 await rm('dist', { recursive: true, force: true });
 await mkdir('dist/src', { recursive: true });
 await cp('public', 'dist', { recursive: true });
 await cp('src', 'dist/src', { recursive: true });
-const html = (await readFile('index.html', 'utf8')).replaceAll('./public/media/', './media/');
+let html = (await readFile('index.html', 'utf8')).replaceAll('./public/media/', './media/');
+// Render the official logo into the generated HTML when the asset is present.
+let hasBrandLogo = false;
+try {
+  await access('public/media/brand/xdaw-logo.webp');
+  hasBrandLogo = true;
+} catch (error) {
+  if (error.code !== 'ENOENT') throw error;
+}
+if (hasBrandLogo) {
+  html = html.replace(/<(a|h1)\b([^>]*data-brand-logo\b[^>]*)>[\s\S]*?<\/\1>/g,
+    (_, tag, attributes) => {
+      const classes = attributes.includes('has-brand-logo') ? attributes : attributes.replace(/class="([^"]*)"/, 'class="$1 has-brand-logo"');
+      const label = tag === 'a' && !classes.includes('aria-label=') ? ' aria-label="XDAW, inicio"' : '';
+      const alt = tag === 'h1' ? 'XDAW' : '';
+      return `<${tag}${classes}${label}><img class="brand-logo-image" src="./media/brand/xdaw-logo.webp" alt="${alt}" width="1254" height="1254" decoding="async"></${tag}>`;
+    });
+}
 await writeFile('dist/index.html', html);
 
 // Static-host fallbacks keep the future public routes navigable until their
