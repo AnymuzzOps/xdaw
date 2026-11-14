@@ -59,3 +59,8 @@
   .world-card h3, .world-card p { text-shadow: 0 1px 2px #0008; }
   .world-card a { min-height: 44px; min-width: 44px; align-items: center; font-size: 14px; }
 }
+
+/* Subtly soften world photographs on mobile without fading the content. */
+@media (max-width: 560px) {
+  .world-card-media > img { opacity: .85; }
+}
