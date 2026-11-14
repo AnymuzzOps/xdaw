@@ -33,3 +33,13 @@
 }
 .hero-logo.has-brand-logo { height: auto; aspect-ratio: 3 / 1; }
 .logo.has-brand-logo { width: 100px; height: auto; aspect-ratio: 3 / 1; flex-shrink: 0; }
+
+/* Original world artwork: preserve the card geometry and protect copy contrast. */
+.world-card-media > img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.world-card-media::before { display: none; }
+.world-card-media::after {
+  z-index: 1;
+  background: linear-gradient(0deg, #070707f5 0%, #070707cc 23%, #07070755 49%, transparent 75%);
+  pointer-events: none;
+}
+.world-card-copy { z-index: 2; }
