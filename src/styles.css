@@ -84,7 +84,7 @@
   margin: 0;
   padding: 28px 24px 24px;
   border-block: 1px solid var(--line);
-  background: #ffffff02;
+  background: var(--black);
 }
 .journey .steps li {
   --step-accent: var(--muted);
@@ -224,4 +224,19 @@
     grid-template-rows: minmax(390px, auto) repeat(2, minmax(250px, auto)) auto;
     grid-template-areas: "ritual" "kids" "community" "events";
   }
+}
+
+/* Motion stays on composited properties; touch devices retain their behavior. */
+.journey .steps li::after { transform-origin: left center; }
+@media (max-width: 800px) {
+  .journey .steps li::after { transform-origin: center top; }
+}
+@media (min-width: 901px) and (hover: hover) and (pointer: fine) {
+  .world-card { transition: transform 280ms ease, border-color 280ms ease, box-shadow 280ms ease; }
+  .world-card-media > img { transition: transform 300ms ease; }
+  .world-card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--accent) 80%, white); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 28%, transparent); }
+  .world-card:hover .world-card-media > img { transform: scale(1.03); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .world-card:hover, .world-card:hover .world-card-media > img { transform: none; }
 }
