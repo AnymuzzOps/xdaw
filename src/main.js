@@ -19,6 +19,19 @@ nav.addEventListener('click', e => {
   document.body.classList.remove('menu-open');
 });
 
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.documentElement.classList.add('js-motion');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const wasOpen = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', 'false');
+    nav.classList.remove('open');
+    if (wasOpen) toggle.focus();
+  }
+});
+
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => entry.isIntersecting && entry.target.classList.add('visible'));
 }, { threshold: .14, rootMargin: '0px 0px -5% 0px' });
