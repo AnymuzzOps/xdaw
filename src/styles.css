@@ -64,3 +64,14 @@
 @media (max-width: 560px) {
   .world-card-media > img { opacity: .85; }
 }
+
+/* Supplied imagery fills the existing experience and organization frames. */
+.live-grid .experience-photo { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; }
+.live-grid .has-photo::before, .org-media.has-photo::before, .org-media.has-photo::after { display: none; }
+.live-grid .has-photo::after {
+  z-index: 1;
+  background: linear-gradient(0deg, #090909fa 0%, #090909d9 40%, #09090933 74%, transparent 100%);
+  pointer-events: none;
+}
+.live-grid .has-photo > div { z-index: 2; }
+.org-media.has-photo > img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
