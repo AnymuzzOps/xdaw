@@ -37,13 +37,49 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: .14, rootMargin: '0px 0px -5% 0px' });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// Observe the whole manifesto once so all four words share the same clock.
+// Start when most of the compact block is visible; await each word in order.
 const manifesto = document.querySelector('.manifesto');
-const manifestoObserver = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    entry.target.classList.add('is-visible');
-    manifestoObserver.unobserve(entry.target);
+const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+const manifestoWords = [...document.querySelectorAll('.manifesto-line')];
+const revealManifestoImmediately = () => {
+  manifestoWords.forEach(word => {
+    word.getAnimations().forEach(animation => animation.cancel());
+    word.classList.add('is-revealed');
   });
-}, { threshold: .2, rootMargin: '0px 0px -5% 0px' });
+};
+motionPreference.addEventListener('change', event => {
+  document.documentElement.classList.toggle('js-motion', !event.matches);
+  if (event.matches) revealManifestoImmediately();
+});
+const manifestoObserver = new IntersectionObserver(entries => {
+  entries.forEach(async entry => {
+    if (!entry.isIntersecting) return;
+    manifestoObserver.unobserve(entry.target);
+    if (motionPreference.matches) return revealManifestoImmediately();
+    for (const word of manifestoWords) {
+      if (motionPreference.matches) return revealManifestoImmediately();
+      const animation = word.animate([
+        { opacity: 0, transform: 'translateY(12px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+      ], { duration: 550, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'forwards' });
+      await animation.finished.catch(() => {});
+      word.classList.add('is-revealed');
+      animation.cancel();
+    }
+  });
+}, { threshold: .6 });
 if (manifesto) manifestoObserver.observe(manifesto);
+
+// Keep the approved text fallback until the original WebP is available.
+const brandLogoUrl = new URL(document.body.dataset.brandLogoSrc, document.baseURI);
+const brandLogo = new Image();
+brandLogo.onload = () => {
+  document.querySelectorAll('[data-brand-logo]').forEach(container => {
+    const image = brandLogo.cloneNode();
+    image.className = 'brand-logo-image';
+    image.alt = container.matches('h1') ? 'XDAW' : '';
+    container.replaceChildren(image);
+    container.classList.add('has-brand-logo');
+  });
+};
+brandLogo.src = brandLogoUrl.href;

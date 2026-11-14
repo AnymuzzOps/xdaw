@@ -4,11 +4,11 @@ await rm('dist', { recursive: true, force: true });
 await mkdir('dist/src', { recursive: true });
 await cp('public', 'dist', { recursive: true });
 await cp('src', 'dist/src', { recursive: true });
-await cp('index.html', 'dist/index.html');
+const html = (await readFile('index.html', 'utf8')).replaceAll('./public/media/', './media/');
+await writeFile('dist/index.html', html);
 
 // Static-host fallbacks keep the future public routes navigable until their
 // dedicated experiences are implemented.
-const html = await readFile('index.html', 'utf8');
 for (const route of ['kids', 'eventos']) {
   await mkdir(`dist/${route}`, { recursive: true });
   // Route fallbacks live one directory deeper. The base keeps the same
