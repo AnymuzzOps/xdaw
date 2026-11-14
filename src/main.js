@@ -37,38 +37,43 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: .14, rootMargin: '0px 0px -5% 0px' });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// Start when most of the compact block is visible; await each word in order.
+// Text is visible by default. Once in view, autonomous animations finish even
+// if unrelated JavaScript subsequently fails; no persistent hidden CSS state.
 const manifesto = document.querySelector('.manifesto');
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 const manifestoWords = [...document.querySelectorAll('.manifesto-line')];
 const revealManifestoImmediately = () => {
-  manifestoWords.forEach(word => {
-    word.getAnimations().forEach(animation => animation.cancel());
-    word.classList.add('is-revealed');
-  });
+  manifestoWords.forEach(word => word.getAnimations().forEach(animation => animation.cancel()));
 };
 motionPreference.addEventListener('change', event => {
   document.documentElement.classList.toggle('js-motion', !event.matches);
   if (event.matches) revealManifestoImmediately();
 });
-const manifestoObserver = new IntersectionObserver(entries => {
-  entries.forEach(async entry => {
-    if (!entry.isIntersecting) return;
-    manifestoObserver.unobserve(entry.target);
-    if (motionPreference.matches) return revealManifestoImmediately();
-    for (const word of manifestoWords) {
-      if (motionPreference.matches) return revealManifestoImmediately();
-      const animation = word.animate([
-        { opacity: 0, transform: 'translateY(12px)' },
-        { opacity: 1, transform: 'translateY(0)' }
-      ], { duration: 550, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'forwards' });
-      await animation.finished.catch(() => {});
-      word.classList.add('is-revealed');
-      animation.cancel();
-    }
-  });
-}, { threshold: .6 });
-if (manifesto) manifestoObserver.observe(manifesto);
+if (manifesto && 'IntersectionObserver' in window) {
+  const manifestoObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      manifestoObserver.unobserve(entry.target);
+      if (motionPreference.matches) return;
+      try {
+        manifestoWords.forEach((word, index) => {
+          word.animate([
+            { opacity: 0, transform: 'translateY(12px)' },
+            { opacity: 1, transform: 'translateY(0)' }
+          ], {
+            duration: 550,
+            delay: index * 550,
+            easing: 'cubic-bezier(.22,1,.36,1)',
+            fill: 'backwards'
+          });
+        });
+      } catch {
+        revealManifestoImmediately();
+      }
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -5% 0px' });
+  manifestoObserver.observe(manifesto);
+}
 
 // Keep the approved text fallback until the original WebP is available.
 const brandLogoUrl = new URL(document.body.dataset.brandLogoSrc, document.baseURI);
