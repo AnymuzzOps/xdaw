@@ -240,3 +240,34 @@
 @media (prefers-reduced-motion: reduce) {
   .world-card:hover, .world-card:hover .world-card-media > img { transform: none; }
 }
+
+/* Desktop reveals decelerate more gradually; mobile timing stays unchanged. */
+@media (min-width: 901px) {
+  .js-motion .reveal {
+    transition-duration: 800ms;
+    transition-timing-function: cubic-bezier(.22, 1, .36, 1);
+  }
+}
+/* Deepen only the mobile text zones, preserving the upper photographs. */
+@media (max-width: 560px) {
+  .world-card-copy::before {
+    background: linear-gradient(to top, rgb(9 9 9 / 97%), rgb(9 9 9 / 96%) calc(100% - 20px), transparent);
+  }
+  .world-card-media::after,
+  .live .live-grid .has-photo::after {
+    background: linear-gradient(0deg, #090909f5 0%, #090909e6 35%, #09090959 65%, transparent 90%);
+  }
+  .live .live-grid .experience-copy { isolation: isolate; }
+  .live .experience-copy::before {
+    content: '';
+    position: absolute;
+    inset: -18px -24px -24px;
+    z-index: -1;
+    background: linear-gradient(to top, rgb(9 9 9 / 97%), rgb(9 9 9 / 95%) calc(100% - 18px), transparent);
+    pointer-events: none;
+  }
+}
+@media (max-width: 560px) {
+  /* Existing charcoal ink on brand orange meets AA for this small CTA label. */
+  .live .live-class .button { color: var(--black); }
+}

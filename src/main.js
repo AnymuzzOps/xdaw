@@ -55,8 +55,12 @@ if (desktopWorlds.matches) worldCards.forEach(card => card.classList.remove('rev
 steps?.classList.remove('reveal');
 
 const observer = new IntersectionObserver(entries => {
+  let revealIndex = 0;
   entries.forEach(entry => {
     if (!entry.isIntersecting) return;
+    if (desktopWorlds.matches) {
+      entry.target.style.transitionDelay = `${Math.min(revealIndex++, 2) * 200}ms`;
+    }
     entry.target.classList.add('visible');
     observer.unobserve(entry.target);
   });
@@ -86,15 +90,17 @@ const groupObserver = new IntersectionObserver(entries => {
         worldCards.forEach((card, index) => animate(card, [
           { opacity: 0, transform: 'translateY(18px) scale(.985)' },
           { opacity: 1, transform: 'translateY(0) scale(1)' }
-        ], { ...revealOptions, delay: index * 125 }));
+        ], { ...revealOptions, duration: 780, delay: index * 220 }));
       } else if (entry.target === steps) {
         const vertical = window.matchMedia('(max-width: 800px)').matches;
+        const desktop = desktopWorlds.matches;
+        const stepDelay = desktop ? 220 : 160;
         [...steps.children].forEach((step, index, all) => {
-          animate(step, revealFrames, { ...revealOptions, delay: index * 160 });
+          animate(step, revealFrames, { ...revealOptions, duration: desktop ? 780 : 550, delay: index * stepDelay });
           if (index < all.length - 1) animate(step, [
             { transform: vertical ? 'scaleY(0)' : 'scaleX(0)' },
             { transform: vertical ? 'scaleY(1)' : 'scaleX(1)' }
-          ], { duration: 380, delay: index * 160 + 120, easing: 'ease-out', fill: 'backwards', pseudoElement: '::after' });
+          ], { duration: desktop ? 650 : 380, delay: index * stepDelay + 120, easing: 'ease-out', fill: 'backwards', pseudoElement: '::after' });
         });
       } else if (entry.target === manifesto) {
         const reveals = manifestoWords.map((word, index) =>
