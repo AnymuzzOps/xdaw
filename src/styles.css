@@ -18,3 +18,18 @@
 @media (prefers-reduced-motion: reduce) {
   .js-motion .manifesto-line { opacity: 1; transform: none; }
 }
+
+/* Frame the supplied square artwork around its central horizontal wordmark. */
+.has-brand-logo { position: relative; overflow: hidden; }
+.has-brand-logo .brand-logo-image {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  left: 0;
+  top: 50%;
+  transform: translateY(-51%);
+  object-fit: contain;
+}
+.hero-logo.has-brand-logo { height: auto; aspect-ratio: 3 / 1; }
+.logo.has-brand-logo { width: 100px; height: auto; aspect-ratio: 3 / 1; flex-shrink: 0; }

@@ -74,10 +74,13 @@ if (manifesto) manifestoObserver.observe(manifesto);
 const brandLogoUrl = new URL(document.body.dataset.brandLogoSrc, document.baseURI);
 const brandLogo = new Image();
 brandLogo.onload = () => {
-  document.querySelectorAll('[data-brand-logo]').forEach(container => {
+  document.querySelectorAll('[data-brand-logo]:not(.has-brand-logo)').forEach(container => {
     const image = brandLogo.cloneNode();
     image.className = 'brand-logo-image';
     image.alt = container.matches('h1') ? 'XDAW' : '';
+    if (container.matches('a') && !container.hasAttribute('aria-label')) {
+      container.setAttribute('aria-label', 'XDAW, inicio');
+    }
     container.replaceChildren(image);
     container.classList.add('has-brand-logo');
   });
