@@ -8,16 +8,12 @@
 .hero-content{width:min(900px,100%);min-width:0}.hero-logo{max-width:100%;font-size:clamp(100px,17vw,230px)}
 @media(max-width:560px){.hero-logo{font-size:30vw}.manifesto{grid-template-columns:1fr 1fr;gap:10px}.manifesto-line{font-size:6.1vw;min-width:0}}
 
-/* One shared trigger preserves reading order across wrapped mobile rows. */
-.js-motion .manifesto-line {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 650ms cubic-bezier(.22,1,.36,1), transform 650ms cubic-bezier(.22,1,.36,1);
-}
-.js-motion .manifesto.is-visible .manifesto-line { opacity: 1; transform: none; }
-.manifesto-line:nth-child(2) { transition-delay: 280ms; }
-.manifesto-line:nth-child(3) { transition-delay: 560ms; }
-.manifesto-line:nth-child(4) { transition-delay: 840ms; }
+/* Words are revealed by an awaited sequence, rather than overlapping delays. */
+.js-motion .manifesto-line { opacity: 0; transform: translateY(12px); }
+.js-motion .manifesto-line.is-revealed { opacity: 1; transform: none; }
+.brand-logo-image { display: block; width: 100%; height: 100%; object-fit: contain; }
+.hero-logo.has-brand-logo { width: min(700px, 100%); height: clamp(100px, 17vw, 210px); margin-inline: auto; }
+.logo.has-brand-logo { width: 85px; height: 27px; }
 .ui-arrow { display: inline-block; width: 14px; height: 14px; flex: 0 0 14px; vertical-align: -.15em; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) {
   .js-motion .manifesto-line { opacity: 1; transform: none; }
