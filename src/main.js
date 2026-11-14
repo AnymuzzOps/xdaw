@@ -1,36 +1,8 @@
-const header = document.querySelector('.site-header');
-const toggle = document.querySelector('.menu-toggle');
-const nav = document.querySelector('#nav');
-
-const updateHeader = () => header.classList.toggle('scrolled', window.scrollY > 36);
-updateHeader();
-window.addEventListener('scroll', updateHeader, { passive: true });
-
-toggle.addEventListener('click', () => {
-  const open = toggle.getAttribute('aria-expanded') === 'true';
-  toggle.setAttribute('aria-expanded', String(!open));
-  nav.classList.toggle('open', !open);
-  document.body.classList.toggle('menu-open', !open);
-});
-nav.addEventListener('click', e => {
-  if (!e.target.closest('a')) return;
-  toggle.setAttribute('aria-expanded', 'false');
-  nav.classList.remove('open');
-  document.body.classList.remove('menu-open');
-});
-
+import { initNavigation } from './navigation.js';
+initNavigation();
 if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   document.documentElement.classList.add('js-motion');
 }
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    const wasOpen = toggle.getAttribute('aria-expanded') === 'true';
-    toggle.setAttribute('aria-expanded', 'false');
-    nav.classList.remove('open');
-    if (wasOpen) toggle.focus();
-  }
-});
 
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 const desktopWorlds = window.matchMedia('(min-width: 901px)');
@@ -92,7 +64,7 @@ const groupObserver = new IntersectionObserver(entries => {
           { opacity: 1, transform: 'translateY(0) scale(1)' }
         ], { ...revealOptions, duration: 780, delay: index * 220 }));
       } else if (entry.target === steps) {
-        const vertical = window.matchMedia('(max-width: 800px)').matches;
+        const vertical = window.matchMedia('(max-width: 900px)').matches;
         const desktop = desktopWorlds.matches;
         const stepDelay = desktop ? 220 : 160;
         [...steps.children].forEach((step, index, all) => {
