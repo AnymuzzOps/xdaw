@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;0,900;1,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./src/styles.css" />
-</head>
+<link rel="stylesheet" href="./src/footer.css"></head>
 <body data-brand-logo-src="./public/media/brand/xdaw-logo.webp">
   <a class="skip" href="#contenido">Ir al contenido</a>
   <header class="site-header" id="header">
@@ -96,7 +96,14 @@
     <section class="closing" id="contacto"><div class="closing-x">X</div><div class="reveal"><p class="kicker">El próximo movimiento es tuyo</p><h2>¿LISTO PARA VIVIR <span>XDAW</span>?</h2><p>Agenda tu primera clase hoy mismo. Siente la música, domina la intensidad y trasciende junto a nosotros.</p><div class="closing-links"><a class="button" href="mailto:contacto@xdaw.cl?subject=Quiero vivir XDAW">Encuentra una clase <svg class="ui-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 19 19 5M5 5h14v14"/></svg></a><a class="button secondary-button" href="#mundos">Ver mundos</a></div></div></section>
   </main>
 
-  <footer><div class="footer-top"><a class="logo has-brand-logo" data-brand-logo href="#inicio" aria-label="XDAW, inicio"><img class="brand-logo-image" src="./public/media/brand/xdaw-logo.webp" alt="" width="1254" height="1254" decoding="async"></a><p>EXOTIC DANCE WORKOUT</p></div><div class="footer-grid"><div><b>Explora</b><a href="#inicio">XDAW</a><a href="#metodo">Método</a><a href="#mundos">Mundos</a><a href="#kids">Kids</a></div><div><b>Conecta</b><a href="#clases">Clases</a><a href="#eventos">Eventos</a><a href="mailto:contacto@xdaw.cl">Contacto</a></div><div><b>Profesional</b><a href="#organizaciones">Organizaciones</a><a href="https://xdawacademy.cl">XDAW Academy <svg class="ui-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 19 19 5M5 5h14v14"/></svg></a></div><div><b>Síguenos</b><span>Redes oficiales próximamente</span></div></div><div class="footer-bottom"><p>Movimiento con propósito.</p><p>© 2026 XDAW <a href="#">Legales</a></p></div></footer>
+  <footer class="universal-footer" data-brand="xdaw">
+  <div class="uf-inner">
+    <div class="uf-top"><a class="uf-logo" href="#inicio" aria-label="XDAW, inicio"><img class="brand-logo-image" src="./public/media/brand/xdaw-logo.webp" alt="" width="1254" height="1254" decoding="async" loading="lazy"></a><p class="uf-description">Danza, entrenamiento y comunidad. Movimiento con propósito.</p><a class="uf-cross" href="https://xdawacademy.cl">XDAW Academy<svg class="uf-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 19 19 5M5 5h14v14"/></svg></a></div>
+    <nav class="uf-navigation" aria-label="Navegación de pie de página"><section class="uf-group"><h2>Explora</h2><ul><li><a href="#metodo">Método</a></li><li><a href="#mundos">Mundos</a></li><li><a href="#kids">Kids</a></li></ul></section><section class="uf-group"><h2>Conecta</h2><ul><li><a href="#clases">Clases</a></li><li><a href="#eventos">Eventos</a></li><li><a href="mailto:contacto@xdaw.cl">Contacto</a></li></ul></section><section class="uf-group"><h2>Más XDAW</h2><ul><li><a href="#organizaciones">Organizaciones</a></li></ul></section></nav>
+    <div class="uf-bottom"><p>© 2026 XDAW. Todos los derechos reservados.</p><nav aria-label="Información legal"><a href="mailto:contacto@xdaw.cl">Consultas legales</a></nav></div>
+  </div>
+</footer>
   <script type="module" src="./src/main.js"></script>
 </body>
 </html>
+
