@@ -4,8 +4,10 @@
   --header-height:var(--header-height-desktop);
   --header-gap:24px;
   --header-max:1312px;
-  --logo-height:36px;
-  --logo-height-mobile:32px;
+  --logo-height:60px;
+  --logo-width:188px;
+  --logo-height-mobile:52px;
+  --logo-width-mobile:154px;
   --text-nav:13px;
   --text-nav-mobile:14px;
   --text-body:14px;
@@ -109,9 +111,9 @@ h2 span { color:var(--orange); }
 @media(max-width:600px) {
   :root { --page-gutter:24px; }
 }
-.site-header .logo.has-brand-logo { height:var(--logo-height);width:auto;aspect-ratio:3/1;flex:0 0 auto; }
+.site-header .logo.has-brand-logo { height:var(--logo-height);width:var(--logo-width);aspect-ratio:auto;flex:0 0 auto; }
 @media(width < 1024px) {
-  .site-header .logo.has-brand-logo { height:var(--logo-height-mobile); }
+  .site-header .logo.has-brand-logo { height:var(--logo-height-mobile);width:var(--logo-width-mobile); }
 }
 .ui-arrow { width:var(--icon-size);height:var(--icon-size);flex:0 0 var(--icon-size);display:inline-block;vertical-align:-.15em;pointer-events:none; }
 .world-card a { min-height:var(--button-height);max-width:100%;padding:10px 18px;gap:var(--space-3);align-items:center;font:var(--weight-ui) var(--text-button)/1.25 var(--font-ui);display:inline-flex;border:1px solid var(--accent);border-radius:99px;color:var(--accent);text-transform:uppercase; }
@@ -434,3 +436,6 @@ h2 span { color:var(--orange); }
   .live .live-class .button { color:var(--black); }
 }
 
+
+/* Optical alignment accounts for the transparent square logo canvas. */
+.site-header .logo.has-brand-logo .brand-logo-image { transform:translateY(-54%); }
