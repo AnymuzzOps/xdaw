@@ -205,15 +205,6 @@ h2 span { color:var(--orange); }
 .closing h2 { font-size:62px;margin-bottom:24px; }
 .closing>div>p { max-width:500px;margin:0 auto;color:var(--muted);font-size:13px; }
 .closing-links { display:flex;justify-content:center;gap:14px;margin-top:30px; }
-footer { width:var(--wrap);margin:auto;padding:50px 0 24px;display:grid;grid-template-columns:1.7fr 1fr;gap:32px; }
-.footer-top .logo { font-size:18px; }
-.footer-top p { font-size:10px;color:var(--muted);max-width:260px;margin-top:16px; }
-.footer-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:23px; }
-.footer-grid>div { display:flex;flex-direction:column;gap:8px; }
-.footer-grid b { font-size:9px;text-transform:uppercase; }
-.footer-grid a,.footer-grid span { font-size:10px;color:var(--muted); }
-.footer-bottom { grid-column:1/-1;display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:24px;color:#787c83;font-size:9px; }
-.footer-bottom p { margin:0; }
 .reveal { opacity:1; }
 .js-motion .reveal { opacity:0;transform:translateY(20px);transition:opacity .7s,transform .7s; }
 .js-motion .reveal.visible { opacity:1;transform:none; }
@@ -226,7 +217,6 @@ footer { width:var(--wrap);margin:auto;padding:50px 0 24px;display:grid;grid-tem
   .org-copy h2 { font-size:39px; }
   .origin { gap:35px; }
   .origin-copy h2 { font-size:39px; }
-  footer { grid-template-columns:1fr 1.4fr; }
   .live-grid { grid-template-columns:1.8fr 1fr; }
   .live-grid p:not(.kicker) { font-size:11px; }
   .live-grid h3 { font-size:25px; }
@@ -264,8 +254,6 @@ footer { width:var(--wrap);margin:auto;padding:50px 0 24px;display:grid;grid-tem
   .origin-copy h2 { font-size:34px; }
   .closing { padding:75px 24px; }
   .closing h2 { font-size:48px; }
-  footer { grid-template-columns:1fr; }
-  .footer-grid { max-width:650px; }
 }
 @media(max-width:600px) {
   h2 { font-size:37px; }
@@ -311,8 +299,6 @@ footer { width:var(--wrap);margin:auto;padding:50px 0 24px;display:grid;grid-tem
   .closing h2 { font-size:42px; }
   .closing>div>p { font-size:12px; }
   .closing-links { gap:10px; }
-  .footer-grid { grid-template-columns:1fr 1fr;gap:25px; }
-  .footer-bottom { gap:15px;align-items:flex-start;flex-direction:column; }
 }
 @media(prefers-reduced-motion:reduce) {
   *,*:before,*:after { transition:none!important;animation:none!important; }
@@ -447,3 +433,4 @@ footer { width:var(--wrap);margin:auto;padding:50px 0 24px;display:grid;grid-tem
   /* Existing charcoal ink on brand orange meets AA for this small CTA label. */
   .live .live-class .button { color:var(--black); }
 }
+

@@ -1,0 +1,56 @@
+@font-face { font-family: XDAW Footer; src: url('./fonts/inter-latin.woff') format('woff'); font-weight: 100 900; font-display: swap; }
+.universal-footer {
+  --footer-accent: var(--orange, #ff7200);
+  --footer-muted: #a8adb4;
+  background: #090909;
+  color: #f7f6f3;
+  font: 400 14px/1.6 'XDAW Footer', Inter, Arial, sans-serif;
+  border-top: 1px solid #ffffff12;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.universal-footer[data-brand="academy"] { --footer-accent: var(--cyan, #00d8ec); }
+.universal-footer *, .universal-footer *::before, .universal-footer *::after { box-sizing: border-box; }
+.universal-footer .uf-inner { width: min(1120px, calc(100% - 64px)); margin-inline: auto; }
+.universal-footer p, .universal-footer h2, .universal-footer ul { margin: 0; padding: 0; }
+.universal-footer a { color: inherit; text-decoration: none; transition: color 180ms ease; }
+.universal-footer a:hover { color: var(--footer-accent); }
+.universal-footer a:focus-visible { outline: 2px solid var(--footer-accent); outline-offset: 4px; border-radius: 3px; }
+.universal-footer .uf-top { display: grid; grid-template-columns: 184px minmax(0, 1fr) 190px; align-items: center; gap: 32px; min-height: 120px; padding-block: 24px; }
+.universal-footer .uf-logo { display: flex; justify-content: flex-start; align-items: center; width: 184px; height: 48px; position: relative; overflow: hidden; flex-shrink: 0; }
+.universal-footer .uf-logo .brand-logo-image { position: absolute; width: 160px; height: auto; left: 0; top: 50%; transform: translateY(-51%); object-fit: contain; }
+.universal-footer .uf-logo .brand-name { font: 400 28px/1.1 var(--display); letter-spacing: -.02em; }
+.universal-footer .uf-logo .brand-name > span { color: var(--footer-accent); font-size: .76em; margin-left: 4px; }
+.universal-footer .uf-description { color: var(--footer-muted); font-size: 13px; line-height: 1.65; max-width: 360px; }
+.universal-footer .uf-cross { display: inline-flex; align-items: center; justify-content: flex-end; gap: 12px; min-height: 44px; font-size: 14px; font-weight: 600; color: var(--footer-accent); }
+.universal-footer .uf-arrow { width: 16px; height: 16px; flex: 0 0 16px; }
+.universal-footer .uf-navigation { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; padding-block: 24px; border-top: 1px solid #ffffff12; }
+.universal-footer .uf-group { min-width: 0; }
+.universal-footer .uf-group h2 { font: 600 12px/1.4 'XDAW Footer', Inter, Arial, sans-serif; letter-spacing: .09em; text-transform: uppercase; margin-bottom: 12px; color: #f7f6f3; }
+.universal-footer .uf-group ul { list-style: none; }
+.universal-footer .uf-group a { display: flex; align-items: center; min-height: 36px; font-size: 14px; color: var(--footer-muted); overflow-wrap: anywhere; }
+.universal-footer .uf-group a:hover { color: var(--footer-accent); }
+.universal-footer .uf-bottom { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 76px; padding-block: 16px; border-top: 1px solid #ffffff12; }
+.universal-footer .uf-bottom p, .universal-footer .uf-bottom a { font-size: 12px; color: var(--footer-muted); }
+.universal-footer .uf-bottom a { display: inline-flex; align-items: center; min-height: 44px; }
+.universal-footer .uf-bottom a:hover { color: var(--footer-accent); }
+@media (max-width: 800px) {
+  .universal-footer .uf-top { grid-template-columns: minmax(0, 1fr) auto; gap: 12px 24px; }
+  .universal-footer .uf-description { grid-column: 1 / -1; grid-row: 2; min-height: 44px; }
+  .universal-footer .uf-cross { grid-column: 2; grid-row: 1; }
+  .universal-footer .uf-group a { min-height: 44px; }
+}
+@media (max-width: 599px) {
+  .universal-footer .uf-inner { width: calc(100% - 40px); }
+  .universal-footer .uf-top { gap: 12px; }
+  .universal-footer .uf-logo { width: 140px; }
+  .universal-footer .uf-logo .brand-logo-image { width: 140px; }
+  .universal-footer .uf-logo .brand-name { font-size: 23px; }
+  .universal-footer .uf-cross { font-size: 13px; gap: 6px; }
+  .universal-footer .uf-navigation { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .universal-footer .uf-group:last-child { grid-column: 1 / -1; }
+  .universal-footer .uf-bottom p { min-height: 39px; }
+  .universal-footer .uf-bottom { flex-direction: column; align-items: flex-start; gap: 4px; padding-block: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .universal-footer a { transition: none; } }
