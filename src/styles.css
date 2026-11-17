@@ -439,3 +439,12 @@ h2 span { color:var(--orange); }
 
 /* Optical alignment accounts for the transparent square logo canvas. */
 .site-header .logo.has-brand-logo .brand-logo-image { transform:translateY(-54%); }
+
+/* Pending connector segments follow their individually observed neighbors. */
+.journey .steps.scroll-progressive li:not(.line-revealed)::after { transform: scaleX(0); }
+@media (max-width: 900px) {
+  .journey .steps.scroll-progressive li:not(.line-revealed)::after { transform: scaleY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .journey .steps.scroll-progressive li::after { transform: none; }
+}

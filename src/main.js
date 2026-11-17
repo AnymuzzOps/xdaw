@@ -20,13 +20,15 @@ const revealFrames = [
 const revealOptions = { duration: 550, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' };
 
 // These groups own their reveal, so they do not also run the generic reveal.
-const worlds = document.querySelector('.world-cards');
 const worldCards = [...document.querySelectorAll('.world-card')];
 const steps = document.querySelector('.journey .steps');
-if (desktopWorlds.matches) worldCards.forEach(card => card.classList.remove('reveal'));
+worldCards.forEach(card => card.classList.remove('reveal'));
+const stageItems = [...(steps?.children || [])];
+const supportsObservers = 'IntersectionObserver' in window;
+if (!supportsObservers) document.documentElement.classList.remove('js-motion');
 steps?.classList.remove('reveal');
 
-const observer = new IntersectionObserver(entries => {
+const observer = supportsObservers ? new IntersectionObserver(entries => {
   let revealIndex = 0;
   entries.forEach(entry => {
     if (!entry.isIntersecting) return;
@@ -36,8 +38,8 @@ const observer = new IntersectionObserver(entries => {
     entry.target.classList.add('visible');
     observer.unobserve(entry.target);
   });
-}, { threshold: .14, rootMargin: '0px 0px -5% 0px' });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}, { threshold: .14, rootMargin: '0px 0px -5% 0px' }) : null;
+document.querySelectorAll('.reveal').forEach(el => observer?.observe(el));
 
 // Base styles stay visible. Finite animations complete autonomously even if
 // unrelated JavaScript fails; nothing relies on a permanent hidden class.
@@ -49,32 +51,19 @@ const cancelMotion = () => {
 };
 motionPreference.addEventListener('change', event => {
   document.documentElement.classList.toggle('js-motion', !event.matches);
-  if (event.matches) cancelMotion();
+  if (event.matches) {
+    cancelMotion();
+    steps?.classList.remove('scroll-progressive');
+  }
 });
 
-const groupObserver = new IntersectionObserver(entries => {
+const groupObserver = supportsObservers ? new IntersectionObserver(entries => {
   entries.forEach(async entry => {
     if (!entry.isIntersecting) return;
     groupObserver.unobserve(entry.target);
     if (motionPreference.matches) return;
     try {
-      if (entry.target === worlds && desktopWorlds.matches) {
-        worldCards.forEach((card, index) => animate(card, [
-          { opacity: 0, transform: 'translateY(18px) scale(.985)' },
-          { opacity: 1, transform: 'translateY(0) scale(1)' }
-        ], { ...revealOptions, duration: 780, delay: index * 220 }));
-      } else if (entry.target === steps) {
-        const vertical = window.matchMedia('(max-width: 900px)').matches;
-        const desktop = desktopWorlds.matches;
-        const stepDelay = desktop ? 220 : 160;
-        [...steps.children].forEach((step, index, all) => {
-          animate(step, revealFrames, { ...revealOptions, duration: desktop ? 780 : 550, delay: index * stepDelay });
-          if (index < all.length - 1) animate(step, [
-            { transform: vertical ? 'scaleY(0)' : 'scaleX(0)' },
-            { transform: vertical ? 'scaleY(1)' : 'scaleX(1)' }
-          ], { duration: desktop ? 650 : 380, delay: index * stepDelay + 120, easing: 'ease-out', fill: 'backwards', pseudoElement: '::after' });
-        });
-      } else if (entry.target === manifesto) {
+      if (entry.target === manifesto) {
         const reveals = manifestoWords.map((word, index) =>
           animate(word, revealFrames, { ...revealOptions, delay: index * 550 }));
         await Promise.all(reveals.map(animation => animation.finished));
@@ -88,8 +77,66 @@ const groupObserver = new IntersectionObserver(entries => {
       cancelMotion();
     }
   });
-}, { threshold: 0, rootMargin: '0px 0px -5% 0px' });
-[manifesto, steps, ...(desktopWorlds.matches ? [worlds] : [])].filter(Boolean).forEach(el => groupObserver.observe(el));
+}, { threshold: 0, rootMargin: '0px 0px -5% 0px' }) : null;
+if (manifesto) groupObserver?.observe(manifesto);
+
+// Each card/stage owns its observation. Only simultaneous intersections share
+// a short stagger; unseen mobile stages never inherit a container-wide timer.
+const observedOnce = (items, threshold, reveal) => {
+  if (!supportsObservers || !items.length) return null;
+  const order = new Map(items.map((item, index) => [item, index]));
+  const seen = new Set();
+  const observer = new IntersectionObserver(entries => {
+    const entering = entries.filter(entry => entry.isIntersecting && entry.intersectionRatio >= threshold && !seen.has(entry.target))
+      .sort((a, b) => order.get(a.target) - order.get(b.target));
+    entering.forEach((entry, batchIndex) => {
+      seen.add(entry.target);
+      observer.unobserve(entry.target);
+      try {
+        reveal(entry.target, batchIndex);
+      } catch {
+        cancelMotion();
+        steps?.classList.remove('scroll-progressive');
+      }
+    });
+  }, { threshold, rootMargin: '0px 0px -5% 0px' });
+  items.forEach(item => observer.observe(item));
+  return observer;
+};
+
+observedOnce(worldCards, .25, (card, batchIndex) => {
+  if (motionPreference.matches) return;
+  animate(card, [
+    { opacity: 0, transform: 'translateY(16px) scale(.985)' },
+    { opacity: 1, transform: 'translateY(0) scale(1)' }
+  ], { ...revealOptions, duration: desktopWorlds.matches ? 1200 : 950, delay: batchIndex * (desktopWorlds.matches ? 300 : 200) });
+});
+
+const stageStarts = new Map();
+const linked = new Set();
+if (supportsObservers && !motionPreference.matches) steps?.classList.add('scroll-progressive');
+observedOnce(stageItems, .3, (stage, batchIndex) => {
+  const delay = batchIndex * 250;
+  stageStarts.set(stage, performance.now() + delay);
+  if (motionPreference.matches) {
+    steps?.classList.remove('scroll-progressive');
+    return;
+  }
+  animate(stage, revealFrames, { ...revealOptions, duration: 1000, delay });
+  stageItems.slice(0, -1).forEach((from, index) => {
+    const to = stageItems[index + 1];
+    if (linked.has(from) || !stageStarts.has(from) || !stageStarts.has(to)) return;
+    linked.add(from);
+    // Let both neighboring stages begin before drawing their shared segment.
+    const lineDelay = Math.max(0, Math.max(stageStarts.get(from), stageStarts.get(to)) - performance.now()) + 120;
+    from.classList.add('line-revealed');
+    const vertical = window.matchMedia('(max-width: 900px)').matches;
+    animate(from, [
+      { transform: vertical ? 'scaleY(0)' : 'scaleX(0)' },
+      { transform: vertical ? 'scaleY(1)' : 'scaleX(1)' }
+    ], { duration: 950, delay: lineDelay, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards', pseudoElement: '::after' });
+  });
+});
 
 // Keep the approved text fallback until the original WebP is available.
 const brandLogoUrl = new URL(document.body.dataset.brandLogoSrc, document.baseURI);
@@ -107,3 +154,4 @@ brandLogo.onload = () => {
   });
 };
 brandLogo.src = brandLogoUrl.href;
+
