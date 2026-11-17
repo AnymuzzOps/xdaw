@@ -69,9 +69,9 @@ const groupObserver = supportsObservers ? new IntersectionObserver(entries => {
         await Promise.all(reveals.map(animation => animation.finished));
         if (!motionPreference.matches) animate(manifesto, [
           { transform: 'scale(1)' },
-          { transform: 'scale(1.012)' },
+          { transform: 'scale(1.025)' },
           { transform: 'scale(1)' }
-        ], { duration: 6000, iterations: Infinity, easing: 'ease-in-out' });
+        ], { duration: 5000, iterations: Infinity, easing: 'ease-in-out' });
       }
     } catch {
       cancelMotion();
