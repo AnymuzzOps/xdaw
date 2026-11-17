@@ -440,11 +440,17 @@ h2 span { color:var(--orange); }
 /* Optical alignment accounts for the transparent square logo canvas. */
 .site-header .logo.has-brand-logo .brand-logo-image { transform:translateY(-54%); }
 
-/* Pending connector segments follow their individually observed neighbors. */
-.journey .steps.scroll-progressive li:not(.line-revealed)::after { transform: scaleX(0); }
+/* Scroll-position values are written atomically; no temporal reveal conflicts. */
+.scroll-item {
+  opacity: var(--scroll-opacity, 1);
+  translate: 0 var(--scroll-y, 0px);
+  scale: var(--scroll-scale, 1);
+}
+.journey .steps.scroll-position li::after { transform: scaleX(var(--connector-progress, 1)); }
 @media (max-width: 900px) {
-  .journey .steps.scroll-progressive li:not(.line-revealed)::after { transform: scaleY(0); }
+  .journey .steps.scroll-position li::after { transform: scaleY(var(--connector-progress, 1)); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .journey .steps.scroll-progressive li::after { transform: none; }
+  .scroll-item { opacity: 1; translate: none; scale: none; }
+  .journey .steps.scroll-position li::after { transform: none; }
 }
